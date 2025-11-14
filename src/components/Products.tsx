@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { useAppContext } from "../context/AppContext";
+import toast from "react-hot-toast";
 
 const Products = () => {
   const { products, addToCart } = useAppContext();
@@ -11,7 +12,8 @@ const Products = () => {
       {/* Product Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
         {products.map((item) => (
-          <Link to={`/product/${item.id}`}
+          <Link
+            to={`/product/${item.id}`}
             key={item.id}
             className="
               bg-white rounded-2xl shadow-md 
@@ -41,7 +43,7 @@ const Products = () => {
               </h2>
 
               <p className="text-xl font-bold text-blue-600 mt-2">
-                ${item.price}
+                ₹{item.price}
               </p>
 
               <button
@@ -54,10 +56,11 @@ const Products = () => {
                   shadow-sm hover:shadow-md
                   cursor-pointer
                 "
-                onClick={(e)=>{
-                  e.preventDefault();   
-                  e.stopPropagation();     
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
                   addToCart(item);
+                  toast.success("Item added to Cart");
                 }}
               >
                 Add to Cart

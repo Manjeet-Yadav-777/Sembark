@@ -1,5 +1,6 @@
 import { useParams } from "react-router-dom";
 import { useAppContext } from "../context/AppContext";
+import toast from "react-hot-toast";
 
 const ProductDetail = () => {
   const { products, addToCart } = useAppContext();
@@ -32,7 +33,7 @@ const ProductDetail = () => {
         </h1>
 
         <p className="text-blue-600 text-3xl font-semibold mt-4">
-          ${product.price}
+          ₹{product.price}
         </p>
 
         <p className="text-gray-600 mt-4 leading-relaxed">
@@ -44,6 +45,7 @@ const ProductDetail = () => {
             e.preventDefault();
             e.stopPropagation();
             addToCart(product)
+            toast.success("Item added to Cart")
           }} className="px-6 py-3 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition-all shadow hover:shadow-lg">
             Add to Cart
           </button>
