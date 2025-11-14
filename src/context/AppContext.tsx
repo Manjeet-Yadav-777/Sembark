@@ -1,6 +1,5 @@
 import { createContext, useContext, useState, useEffect } from "react";
 import type { ReactNode } from "react";
-import toast from "react-hot-toast";
 
 export interface Product {
   id: number;
