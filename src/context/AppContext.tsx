@@ -31,8 +31,7 @@ interface AppContextType {
   increaseQty: (id: number) => void;
   decreaseQty: (id: number) => void;
   removeItem: (id: number) => void;
-  filterByCategory: (category: string) => void;
-  sortByPrice: (order: string) => void;
+
 }
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
@@ -117,29 +116,6 @@ export const AppProvider = ({ children }: ProviderProps) => {
     }
   };
 
-  const filterByCategory = (category: string) => {
-    if (category === "all") {
-      setProducts(allProducts);
-      return;
-    }
-
-    const filtered = allProducts.filter((item) => item.category === category);
-
-    setProducts(filtered);
-  };
-
-  const sortByPrice = (order: string) => {
-    let sorted = [...products];
-
-    if (order === "low-to-high") {
-      sorted.sort((a, b) => a.price - b.price);
-    } else if (order === "high-to-low") {
-      sorted.sort((a, b) => b.price - a.price);
-    }
-
-    setProducts(sorted);
-  };
-
   const addToCart = (product: Product) => {
     setCart((prev) => {
       const exists = prev.find((item) => item.id === product.id);
@@ -201,8 +177,6 @@ export const AppProvider = ({ children }: ProviderProps) => {
         increaseQty,
         decreaseQty,
         removeItem,
-        filterByCategory,
-        sortByPrice,
         allProducts,
         singleProduct,
       }}
