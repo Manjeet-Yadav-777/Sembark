@@ -20,9 +20,12 @@ export interface CartItem {
 
 interface AppContextType {
   products: Product[];
+  allProducts: Product[];
+  singleProduct: Product | null;
   loading: boolean;
 
   fetchProducts: () => Promise<void>;
+  getSingleProduct: (id: number) => void;
   addToCart: (product: Product) => void;
   cart: CartItem[];
   increaseQty: (id: number) => void;
@@ -41,6 +44,13 @@ interface ProviderProps {
 export const AppProvider = ({ children }: ProviderProps) => {
   const [products, setProducts] = useState<Product[]>(() => {
     const saved = localStorage.getItem("products");
+    return saved ? JSON.parse(saved) : [];
+  });
+
+  const [singleProduct, setSingleProduct] = useState<Product | null>(null);
+
+  const [allProducts, setAllProducts] = useState<Product[]>(() => {
+    const saved = localStorage.getItem("allProducts");
     return saved ? JSON.parse(saved) : [];
   });
 
@@ -68,7 +78,10 @@ export const AppProvider = ({ children }: ProviderProps) => {
         description: item.description,
       }));
 
+      setAllProducts(formatted);
       setProducts(formatted);
+
+      localStorage.setItem("allProducts", JSON.stringify(formatted));
       localStorage.setItem("products", JSON.stringify(formatted));
     } catch (error) {
       console.error("Error fetching products:", error);
@@ -77,11 +90,34 @@ export const AppProvider = ({ children }: ProviderProps) => {
     }
   };
 
-  const filterByCategory = (category: string) => {
-    const allProducts: Product[] = JSON.parse(
-      localStorage.getItem("products") || "[]"
-    );
+  const getSingleProduct = async (id: number) => {
+    try {
+      setLoading(true);
 
+      const res = await fetch(`https://fakestoreapi.com/products/${id}`);
+      const data = await res.json();
+      console.log(data);
+
+      const formatted: Product = {
+        id: data.id,
+        title: data.title,
+        price: data.price,
+        image: data.image,
+        category: data.category,
+        description: data.description,
+      };
+
+      setSingleProduct(formatted);
+
+      localStorage.setItem("singleProduct", JSON.stringify(formatted));
+    } catch (error) {
+      console.error("Error fetching products:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const filterByCategory = (category: string) => {
     if (category === "all") {
       setProducts(allProducts);
       return;
@@ -97,8 +133,7 @@ export const AppProvider = ({ children }: ProviderProps) => {
 
     if (order === "low-to-high") {
       sorted.sort((a, b) => a.price - b.price);
-    }
-    if (order === "high-to-low") {
+    } else if (order === "high-to-low") {
       sorted.sort((a, b) => b.price - a.price);
     }
 
@@ -146,6 +181,10 @@ export const AppProvider = ({ children }: ProviderProps) => {
   }, []);
 
   useEffect(() => {
+    localStorage.setItem("products", JSON.stringify(products));
+  }, [products]);
+
+  useEffect(() => {
     localStorage.setItem("cart", JSON.stringify(cart));
     console.log(cart);
   }, [cart]);
@@ -156,13 +195,16 @@ export const AppProvider = ({ children }: ProviderProps) => {
         products,
         loading,
         fetchProducts,
+        getSingleProduct,
         addToCart,
         cart,
         increaseQty,
         decreaseQty,
         removeItem,
         filterByCategory,
-        sortByPrice
+        sortByPrice,
+        allProducts,
+        singleProduct,
       }}
     >
       {children}
