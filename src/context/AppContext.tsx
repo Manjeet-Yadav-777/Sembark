@@ -28,6 +28,8 @@ interface AppContextType {
   increaseQty: (id: number) => void;
   decreaseQty: (id: number) => void;
   removeItem: (id: number) => void;
+  filterByCategory: (category: string) => void;
+  sortByPrice: (order: string) => void;
 }
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
@@ -73,6 +75,34 @@ export const AppProvider = ({ children }: ProviderProps) => {
     } finally {
       setLoading(false);
     }
+  };
+
+  const filterByCategory = (category: string) => {
+    const allProducts: Product[] = JSON.parse(
+      localStorage.getItem("products") || "[]"
+    );
+
+    if (category === "all") {
+      setProducts(allProducts);
+      return;
+    }
+
+    const filtered = allProducts.filter((item) => item.category === category);
+
+    setProducts(filtered);
+  };
+
+  const sortByPrice = (order: string) => {
+    let sorted = [...products];
+
+    if (order === "low-to-high") {
+      sorted.sort((a, b) => a.price - b.price);
+    }
+    if (order === "high-to-low") {
+      sorted.sort((a, b) => b.price - a.price);
+    }
+
+    setProducts(sorted);
   };
 
   const addToCart = (product: Product) => {
@@ -131,6 +161,8 @@ export const AppProvider = ({ children }: ProviderProps) => {
         increaseQty,
         decreaseQty,
         removeItem,
+        filterByCategory,
+        sortByPrice
       }}
     >
       {children}

@@ -1,9 +1,8 @@
 import { Link } from "react-router-dom";
 import { useAppContext } from "../context/AppContext";
-import toast from "react-hot-toast";
 
 const Products = () => {
-  const { products, addToCart } = useAppContext();
+  const { products } = useAppContext();
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-12">
@@ -46,25 +45,7 @@ const Products = () => {
                 ₹{item.price}
               </p>
 
-              <button
-                className="
-                  w-full mt-4 py-2.5 
-                  bg-blue-600 text-white 
-                  rounded-lg font-medium 
-                  hover:bg-blue-700 
-                  transition-all duration-300 
-                  shadow-sm hover:shadow-md
-                  cursor-pointer
-                "
-                onClick={(e) => {
-                  e.preventDefault();
-                  e.stopPropagation();
-                  addToCart(item);
-                  toast.success("Item added to Cart");
-                }}
-              >
-                Add to Cart
-              </button>
+
             </div>
           </Link>
         ))}
