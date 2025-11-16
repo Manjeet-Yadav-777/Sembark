@@ -18,39 +18,59 @@ export interface CartItem {
   qty: number;
 }
 
+export type SortOption = "price-low" | "price-high" | "name-asc" | "name-desc";
+
 interface AppContextType {
   products: Product[];
   allProducts: Product[];
+  filteredProducts: Product[];
   singleProduct: Product | null;
   loading: boolean;
+  selectedCategories: string[];
+  sortOption: SortOption;
+  cart: CartItem[];
 
   fetchProducts: () => Promise<void>;
   getSingleProduct: (id: number) => void;
   addToCart: (product: Product) => void;
-  cart: CartItem[];
+  filterProducts: (categories: string[]) => void;
+  sortProducts: (option: SortOption) => void;
+  resetFilters: () => void;
   increaseQty: (id: number) => void;
   decreaseQty: (id: number) => void;
+  removeFromCart: (productId: number) => void;
   removeItem: (id: number) => void;
-
 }
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
 
-interface ProviderProps {
-  children: ReactNode;
-}
-
-export const AppProvider = ({ children }: ProviderProps) => {
-  const [products, setProducts] = useState<Product[]>(() => {
-    const saved = localStorage.getItem("products");
-    return saved ? JSON.parse(saved) : [];
-  });
-
-  const [singleProduct, setSingleProduct] = useState<Product | null>(null);
-
+export const AppProvider = ({ children }: { children: ReactNode }) => {
   const [allProducts, setAllProducts] = useState<Product[]>(() => {
     const saved = localStorage.getItem("allProducts");
     return saved ? JSON.parse(saved) : [];
+  });
+
+  const [products, setProducts] = useState<Product[]>([]);
+  const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
+  const [singleProduct, setSingleProduct] = useState<Product | null>(null);
+  const [selectedCategories, setSelectedCategories] = useState<string[]>(() => {
+    const saved = sessionStorage.getItem("selectedCategories");
+    if (saved) return JSON.parse(saved);
+    const params = new URLSearchParams(window.location.search);
+    const categoriesParam = params.get("categories");
+    if (categoriesParam) return categoriesParam.split(",").filter(Boolean);
+    return ["All"];
+  });
+
+  const [sortOption, setSortOption] = useState<SortOption>(() => {
+    const saved = sessionStorage.getItem("sortOption");
+    if (saved) return saved as SortOption;
+    const params = new URLSearchParams(window.location.search);
+    const sortParam = params.get("sort");
+    if (sortParam && ["price-low", "price-high", "name-asc", "name-desc"].includes(sortParam)) {
+      return sortParam as SortOption;
+    }
+    return "price-low";
   });
 
   const [cart, setCart] = useState<CartItem[]>(() => {
@@ -58,17 +78,23 @@ export const AppProvider = ({ children }: ProviderProps) => {
     return saved ? JSON.parse(saved) : [];
   });
 
-  const [loading, setLoading] = useState<boolean>(false);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    const saved = localStorage.getItem("cart");
+    if (saved) setCart(JSON.parse(saved));
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem("cart", JSON.stringify(cart));
+  }, [cart]);
 
   const fetchProducts = async () => {
     try {
       setLoading(true);
-
       const res = await fetch("https://fakestoreapi.com/products");
       const data = await res.json();
-      console.log(data);
-
-      const formatted: Product[] = data.map((item: any) => ({
+      const formatted = data.map((item: any) => ({
         id: item.id,
         title: item.title,
         price: item.price,
@@ -76,14 +102,19 @@ export const AppProvider = ({ children }: ProviderProps) => {
         category: item.category,
         description: item.description,
       }));
-
       setAllProducts(formatted);
-      setProducts(formatted);
 
       localStorage.setItem("allProducts", JSON.stringify(formatted));
-      localStorage.setItem("products", JSON.stringify(formatted));
+      const filtered = selectedCategories.includes("All") || selectedCategories.length === 0
+        ? [...formatted]
+        : formatted.filter((p: Product) => selectedCategories.includes(p.category));
+        
+      const sorted = sortProductsList(filtered, sortOption);
+
+      setFilteredProducts(sorted);
+      setProducts(sorted);
     } catch (error) {
-      console.error("Error fetching products:", error);
+      console.error("Error:", error);
     } finally {
       setLoading(false);
     }
@@ -92,25 +123,18 @@ export const AppProvider = ({ children }: ProviderProps) => {
   const getSingleProduct = async (id: number) => {
     try {
       setLoading(true);
-
       const res = await fetch(`https://fakestoreapi.com/products/${id}`);
       const data = await res.json();
-      console.log(data);
-
-      const formatted: Product = {
+      setSingleProduct({
         id: data.id,
         title: data.title,
         price: data.price,
         image: data.image,
         category: data.category,
         description: data.description,
-      };
-
-      setSingleProduct(formatted);
-
-      localStorage.setItem("singleProduct", JSON.stringify(formatted));
+      });
     } catch (error) {
-      console.error("Error fetching products:", error);
+      console.error("Error:", error);
     } finally {
       setLoading(false);
     }
@@ -119,26 +143,22 @@ export const AppProvider = ({ children }: ProviderProps) => {
   const addToCart = (product: Product) => {
     setCart((prev) => {
       const exists = prev.find((item) => item.id === product.id);
-
       if (exists) {
         return prev.map((item) =>
           item.id === product.id ? { ...item, qty: item.qty + 1 } : item
         );
       }
-
       return [...prev, { ...product, qty: 1 }];
     });
   };
 
-  const increaseQty = (id: number): void => {
+  const increaseQty = (id: number) => {
     setCart((prev) =>
-      prev.map((item) =>
-        item.id === id ? { ...item, qty: item.qty + 1 } : item
-      )
+      prev.map((item) => (item.id === id ? { ...item, qty: item.qty + 1 } : item))
     );
   };
 
-  const decreaseQty = (id: number): void => {
+  const decreaseQty = (id: number) => {
     setCart((prev) =>
       prev
         .map((item) => (item.id === id ? { ...item, qty: item.qty - 1 } : item))
@@ -146,39 +166,117 @@ export const AppProvider = ({ children }: ProviderProps) => {
     );
   };
 
-  const removeItem = (id: number): void => {
+  const removeItem = (id: number) => {
     setCart((prev) => prev.filter((item) => item.id !== id));
   };
 
+  const removeFromCart = (productId: number) => {
+    removeItem(productId);
+  };
+
+  const filterProducts = (categories: string[]) => {
+    setSelectedCategories(categories);
+    sessionStorage.setItem("selectedCategories", JSON.stringify(categories));
+    const params = new URLSearchParams(window.location.search);
+    if (categories.includes("All") || categories.length === 0) {
+      params.delete("categories");
+    } else {
+      params.set("categories", categories.join(","));
+    }
+    window.history.replaceState({}, "", `${window.location.pathname}${params.toString() ? `?${params.toString()}` : ""}`);
+    console.log("Selected categories:", categories);
+    let filtered = allProducts;
+    if (!categories.includes("All") && categories.length > 0) {
+      filtered = allProducts.filter((p) => categories.includes(p.category));
+    }
+    const sorted = sortProductsList(filtered, sortOption);
+    setFilteredProducts(sorted);
+    setProducts(sorted);
+  };
+
+  const sortProducts = (option: SortOption) => {
+    setSortOption(option);
+    sessionStorage.setItem("sortOption", option);
+    const params = new URLSearchParams(window.location.search);
+    console.log(params);
+    
+    params.set("sort", option);
+    window.history.replaceState({}, "", `${window.location.pathname}?${params.toString()}`);
+    console.log("Sort option:", option);
+    let filtered = allProducts;
+    if (!selectedCategories.includes("All") && selectedCategories.length > 0) {
+      filtered = allProducts.filter((p) => selectedCategories.includes(p.category));
+    }
+    const sorted = sortProductsList(filtered, option);
+    setFilteredProducts(sorted);
+    setProducts(sorted);
+  };
+
+  const sortProductsList = (list: Product[], option: SortOption): Product[] => {
+    const sorted = [...list];
+    if (option === "price-low") {
+      sorted.sort((a, b) => a.price - b.price);
+    } else if (option === "price-high") {
+      sorted.sort((a, b) => b.price - a.price);
+    } else if (option === "name-asc") {
+      sorted.sort((a, b) => a.title.localeCompare(b.title));
+    } else if (option === "name-desc") {
+      sorted.sort((a, b) => b.title.localeCompare(a.title));
+    }
+    return sorted;
+  };
+
+  const resetFilters = () => {
+    setSelectedCategories(["All"]);
+    setSortOption("price-low");
+    sessionStorage.removeItem("selectedCategories");
+    sessionStorage.removeItem("sortOption");
+    window.history.replaceState({}, "", window.location.pathname);
+    const sorted = sortProductsList([...allProducts], "price-low");
+    setFilteredProducts(sorted);
+    setProducts(sorted);
+    console.log("Filters reset to default");
+  };
+
   useEffect(() => {
-    if (products.length === 0) {
+    if (allProducts.length === 0) {
       fetchProducts();
     }
   }, []);
 
   useEffect(() => {
-    localStorage.setItem("products", JSON.stringify(products));
-  }, [products]);
-
-  useEffect(() => {
-    localStorage.setItem("cart", JSON.stringify(cart));
-    console.log(cart);
-  }, [cart]);
+    if (allProducts.length > 0) {
+      let filtered = allProducts;
+      if (!selectedCategories.includes("All") && selectedCategories.length > 0) {
+        filtered = allProducts.filter((p) => selectedCategories.includes(p.category));
+      }
+      const sorted = sortProductsList(filtered, sortOption);
+      setFilteredProducts(sorted);
+      setProducts(sorted);
+    }
+  }, [allProducts, selectedCategories, sortOption]);
 
   return (
     <AppContext.Provider
       value={{
         products,
+        allProducts,
+        filteredProducts,
+        singleProduct,
         loading,
+        selectedCategories,
+        sortOption,
+        cart,
         fetchProducts,
         getSingleProduct,
         addToCart,
-        cart,
+        filterProducts,
+        sortProducts,
+        resetFilters,
         increaseQty,
         decreaseQty,
+        removeFromCart,
         removeItem,
-        allProducts,
-        singleProduct,
       }}
     >
       {children}
@@ -191,3 +289,4 @@ export const useAppContext = () => {
   if (!ctx) throw new Error("useAppContext must be used inside AppProvider");
   return ctx;
 };
+

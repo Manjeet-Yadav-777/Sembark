@@ -10,28 +10,31 @@ const CartPage = () => {
   );
 
   return (
-    <div className="min-h-screen bg-gray-100 pt-[14vh] p-6">
+    <div className="min-h-screen bg-gray-100 pt-20 p-4 ">
       <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-[2fr_1fr] gap-6">
-        <div className="bg-white shadow-md rounded-2xl p-6 flex flex-col">
+        {/* Cart Items */}
+        <div className="bg-white shadow-md rounded-2xl p-4 sm:p-6 flex flex-col">
           <h2 className="text-2xl font-bold mb-4 text-center">Your Cart</h2>
 
           {cart.length === 0 ? (
-            <p className="text-gray-500 text-lg text-center mt-20">Your cart is empty.</p>
+            <p className="text-gray-500 text-lg text-center mt-20">
+              Your cart is empty.
+            </p>
           ) : (
             <div className="space-y-4">
               {cart.map((item) => (
                 <div
                   key={item.id}
-                  className="flex justify-between items-center bg-gray-50 p-4 rounded-xl border"
+                  className="flex flex-col sm:flex-row justify-between items-center bg-gray-50 p-4 rounded-xl border"
                 >
-                  <div className="flex items-center gap-4">
+                  <div className="flex items-center gap-4 w-full sm:w-auto">
                     <img
                       src={item.image}
                       alt={item.title}
-                      className="w-20 h-20 object-contain"
+                      className="w-24 h-24 sm:w-20 sm:h-20 object-contain"
                     />
 
-                    <div className="flex flex-col gap-1">
+                    <div className="flex flex-col gap-1 max-w-[200px] sm:max-w-none">
                       <h3 className="font-semibold text-gray-800">
                         {item.title.slice(0, 30)}...
                       </h3>
@@ -40,23 +43,23 @@ const CartPage = () => {
                         ₹{item.price} X {item.qty} = ₹
                         {(item.price * item.qty).toFixed(2)}
                       </p>
-
                     </div>
                   </div>
 
-                  <div className="font-bold text-gray-800 text-xl flex gap-5">
-                    <div className="flex items-center gap-3 mt-1">
-                      <button onClick={()=>{
-                        decreaseQty(item.id);
-                        toast.success("Quantity Decreased")
-                      }} className="w-8 h-8 cursor-pointer flex items-center justify-center bg-gray-300 rounded-lg text-lg font-bold">
+                  <div className="flex flex-col sm:flex-row items-center gap-4 mt-3 sm:mt-0">
+                    <div className="flex items-center gap-2">
+                      <button
+                        onClick={() => {
+                          decreaseQty(item.id);
+                          toast.success("Quantity Decreased");
+                        }}
+                        className="w-8 h-8 cursor-pointer flex items-center justify-center bg-gray-300 rounded-lg text-lg font-bold"
+                      >
                         -
                       </button>
-
                       <span className="font-semibold text-lg">{item.qty}</span>
-
                       <button
-                        onClick={()=>{
+                        onClick={() => {
                           increaseQty(item.id);
                           toast.success("Quantity Increased");
                         }}
@@ -65,10 +68,13 @@ const CartPage = () => {
                         +
                       </button>
                     </div>
-                    <button onClick={()=> {
-                      removeItem(item.id);
-                      toast.success("Item Removed")
-                    }} className="text-sm px-3 py-2 bg-red-500 text-white rounded-md cursor-pointer">
+                    <button
+                      onClick={() => {
+                        removeItem(item.id);
+                        toast.success("Item Removed");
+                      }}
+                      className="text-sm px-3 py-2 bg-red-500 text-white rounded-md cursor-pointer"
+                    >
                       Remove
                     </button>
                   </div>
@@ -78,7 +84,7 @@ const CartPage = () => {
           )}
         </div>
 
-        <div className="bg-white shadow-md rounded-2xl p-6 h-fit sticky top-10">
+        <div className="bg-white shadow-md rounded-2xl p-4 sm:p-6 h-fit sticky top-4">
           <h2 className="text-xl font-bold mb-4">Price Details</h2>
 
           <div className="space-y-3 text-gray-700">
