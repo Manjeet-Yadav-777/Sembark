@@ -25,14 +25,14 @@ const ProductDetail = () => {
     );
 
   return (
-    <div className="px-6 py-12 pt-[14vh] ">
+    <main className="px-6 py-12 pt-[14vh] ">
       <Link to={"/"} className="text-blue-600 flex gap-1 items-center lg:ml-14">
         <span>
           <ArrowLeft size={16} />
         </span>{" "}
         Back to Home
       </Link>
-      <div className="max-w-6xl mx-auto mt-10  grid grid-cols-1 md:grid-cols-2 gap-10 min-h-[100vh]">
+      <section className="max-w-6xl mx-auto mt-10  grid grid-cols-1 md:grid-cols-2 gap-10 min-h-[100vh]">
         <div className="bg-white rounded-2xl shadow-md p-6 flex items-center justify-center">
           <img
             src={singleProduct.image}
@@ -42,11 +42,11 @@ const ProductDetail = () => {
         </div>
 
         <div className="flex flex-col justify-center">
-          <h1 className="text-3xl font-bold text-gray-900 leading-snug">
+          <h1 className="product-title text-3xl font-bold text-gray-900 leading-snug">
             {singleProduct.title}
           </h1>
 
-          <p className="text-blue-600 text-3xl font-semibold mt-4">
+          <p className="product-price text-blue-600 text-3xl font-semibold mt-4">
             ₹{singleProduct.price}
           </p>
 
@@ -89,8 +89,8 @@ const ProductDetail = () => {
             <span className="text-gray-500 ml-2 text-sm">(120 reviews)</span>
           </div>
         </div>
-      </div>
-    </div>
+      </section>
+    </main>
   );
 };
 

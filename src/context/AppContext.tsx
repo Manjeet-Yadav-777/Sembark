@@ -103,16 +103,15 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
         description: item.description,
       }));
       setAllProducts(formatted);
-
       localStorage.setItem("allProducts", JSON.stringify(formatted));
+
       const filtered = selectedCategories.includes("All") || selectedCategories.length === 0
         ? [...formatted]
         : formatted.filter((p: Product) => selectedCategories.includes(p.category));
-        
       const sorted = sortProductsList(filtered, sortOption);
-
       setFilteredProducts(sorted);
       setProducts(sorted);
+      
     } catch (error) {
       console.error("Error:", error);
     } finally {
