@@ -1,5 +1,6 @@
 import { createContext, useContext, useState, useEffect } from "react";
 import type { ReactNode } from "react";
+import toast from "react-hot-toast";
 
 export interface Product {
   id: number;
@@ -23,7 +24,6 @@ export type SortOption = "price-low" | "price-high" | "name-asc" | "name-desc";
 interface AppContextType {
   products: Product[];
   allProducts: Product[];
-  filteredProducts: Product[];
   singleProduct: Product | null;
   loading: boolean;
   selectedCategories: string[];
@@ -51,7 +51,6 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
   });
 
   const [products, setProducts] = useState<Product[]>([]);
-  const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
   const [singleProduct, setSingleProduct] = useState<Product | null>(null);
   const [selectedCategories, setSelectedCategories] = useState<string[]>(() => {
     const saved = sessionStorage.getItem("selectedCategories");
@@ -109,11 +108,10 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
         ? [...formatted]
         : formatted.filter((p: Product) => selectedCategories.includes(p.category));
       const sorted = sortProductsList(filtered, sortOption);
-      setFilteredProducts(sorted);
       setProducts(sorted);
       
-    } catch (error) {
-      // Error handling
+    } catch (error : any) {
+      toast.error(error.message || error);
     } finally {
       setLoading(false);
     }
@@ -132,8 +130,8 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
         category: data.category,
         description: data.description,
       });
-    } catch (error) {
-      // Error handling
+    } catch (error : any) {
+      toast.error(error.message || error);
     } finally {
       setLoading(false);
     }
@@ -188,7 +186,6 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
       filtered = allProducts.filter((p) => categories.includes(p.category));
     }
     const sorted = sortProductsList(filtered, sortOption);
-    setFilteredProducts(sorted);
     setProducts(sorted);
   };
 
@@ -203,7 +200,6 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
       filtered = allProducts.filter((p) => selectedCategories.includes(p.category));
     }
     const sorted = sortProductsList(filtered, option);
-    setFilteredProducts(sorted);
     setProducts(sorted);
   };
 
@@ -228,7 +224,6 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
     sessionStorage.removeItem("sortOption");
     window.history.replaceState({}, "", window.location.pathname);
     const sorted = sortProductsList([...allProducts], "price-low");
-    setFilteredProducts(sorted);
     setProducts(sorted);
   };
 
@@ -245,7 +240,6 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
         filtered = allProducts.filter((p) => selectedCategories.includes(p.category));
       }
       const sorted = sortProductsList(filtered, sortOption);
-      setFilteredProducts(sorted);
       setProducts(sorted);
     }
   }, [allProducts, selectedCategories, sortOption]);
@@ -255,7 +249,6 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
       value={{
         products,
         allProducts,
-        filteredProducts,
         singleProduct,
         loading,
         selectedCategories,
