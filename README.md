@@ -1,5 +1,7 @@
 # Sembark - E-Commerce Project
 
+🚀 **Live Demo:** https://sembark-alpha.vercel.app/
+
 A modern e-commerce web application built with React, TypeScript, and Vite. This project features product listings, detailed product pages, shopping cart functionality, and more.
 
 ## 📋 Table of Contents
@@ -353,3 +355,4 @@ If you're stuck:
 **Happy Coding! 🚀**
 
 If you found this project helpful, consider giving it a star on GitHub!
+
