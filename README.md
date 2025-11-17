@@ -1,358 +1,172 @@
-# Sembark - E-Commerce Project
+# Sembark - E-Commerce Application
 
 🚀 **Live Demo:** https://sembark-alpha.vercel.app/
 
-A modern e-commerce web application built with React, TypeScript, and Vite. This project features product listings, detailed product pages, shopping cart functionality, and more.
+A modern, responsive e-commerce web application built with React, TypeScript, and Vite. Features product listings, detailed product pages, shopping cart functionality, and smooth animations.
 
-## 📋 Table of Contents
+## 📦 Features
 
-- [Prerequisites](#prerequisites)
-- [Installation Guide](#installation-guide)
-- [Running the Project](#running-the-project)
-- [Project Structure](#project-structure)
-- [Available Scripts](#available-scripts)
-- [Troubleshooting](#troubleshooting)
-- [Technologies Used](#technologies-used)
+### 🏠 Home Page
+- Responsive product grid with smooth animations
+- Category filters with URL-based state management
+- Sorting functionality (Price: Low/High, Name: A-Z/Z-A)
+- Real-time filter updates
+- Accessible UI with semantic HTML
+- Loading states and empty states
 
-## Prerequisites
+### 🛒 Cart
+- Add to cart functionality
+- Increase/decrease quantity
+- Remove products from cart
+- Persistent cart using localStorage
+- Total price calculation
+- Empty cart state with call-to-action
+- Responsive cart layout
 
-Before you start, make sure you have the following installed on your computer:
+### 📄 Product Details Page
+- Dynamic routing (`/product/:id`)
+- Comprehensive product information display
+- Add to cart and Buy Now buttons
+- Product image with hover effects
+- Rating display
+- Price details with discount indicators
+- Back navigation
+- Accessible image with alt text
 
-### 1. Node.js and npm
+### 🎨 UI/UX Features
+- Smooth animations using Framer Motion
+- Responsive design (mobile, tablet, desktop)
+- Modern and clean interface
+- Toast notifications for user actions
+- Loading spinners
+- Hover effects and transitions
 
-**What is Node.js?**  
-Node.js is a runtime environment that allows you to run JavaScript on your computer. npm (Node Package Manager) comes with Node.js and helps you install project dependencies.
+### 🧪 Testing (Cypress)
+- Home page tests
+- Product details page tests
+- Cart page tests
+- Basic page functionality verification
 
-**How to Install:**
+## 🔧 Tech Stack
 
-#### For Windows:
+- **React 19** - UI library
+- **TypeScript** - Type safety
+- **Vite** - Build tool and dev server
+- **React Router** - Client-side routing
+- **Context API** - State management
+- **Tailwind CSS** - Styling
+- **Framer Motion** - Animations
+- **React Hot Toast** - Notifications
+- **Cypress** - E2E testing
+- **FakeStore API** - Product data
 
-1. Go to [https://nodejs.org/](https://nodejs.org/)
-2. Download the **LTS (Long Term Support)** version (recommended)
-3. Run the downloaded installer file (`.msi`)
-4. Follow the installation wizard:
-   - Click "Next" on all screens
-   - Accept the license agreement
-   - Keep default installation path
-   - Make sure "Add to PATH" is checked
-   - Click "Install"
-5. Wait for installation to complete
-6. Click "Finish"
+## 📁 Folder Structure
 
-#### For macOS:
+```
+src/
+  components/
+    Navbar.tsx          # Navigation bar with cart icon
+    Footer.tsx          # Footer component
+    Products.tsx        # Product listing with filters & sorting
 
-1. Go to [https://nodejs.org/](https://nodejs.org/)
-2. Download the **LTS** version
-3. Open the downloaded `.pkg` file
-4. Follow the installation instructions
-5. Click through the installer
+  context/
+    AppContext.tsx      # Global state management
 
-#### For Linux:
+  pages/
+    Home.tsx            # Home page
+    ProductDetail.tsx   # Product details page
+    CartPage.tsx        # Shopping cart page
 
-Open your terminal and run:
+  routes/
+    AppRouter.tsx      # Route configuration
+
+  utils/
+    ScrollToTop.tsx    # Scroll to top utility
+
+  App.tsx              # Main app component
+  main.tsx             # Application entry point
+
+cypress/
+  e2e/
+    baisc-page-testing.cy.js  # E2E tests
+  fixtures/
+  support/
+```
+
+## 🛠️ Installation & Setup
+
+### Clone the repository:
 
 ```bash
-sudo apt update
-sudo apt install nodejs npm
+git clone <your-repository-url>
+cd Sembark
 ```
 
-**Verify Installation:**
+### Install dependencies:
 
-1. Open your **Command Prompt** (Windows) or **Terminal** (Mac/Linux)
-2. Type the following commands and press Enter after each:
-   ```bash
-   node --version
-   npm --version
-   ```
-3. You should see version numbers (like `v20.x.x` and `10.x.x`)
-4. If you see version numbers, you're all set! ✅
-
-### 2. Git (Optional but Recommended)
-
-**What is Git?**  
-Git helps you download projects from GitHub easily.
-
-**How to Install:**
-
-- **Windows/Mac:** Download from [https://git-scm.com/downloads](https://git-scm.com/downloads)
-- **Linux:** Run `sudo apt install git` in terminal
-
-## Installation Guide
-
-Follow these steps carefully to set up the project on your local computer:
-
-### Step 1: Download the Project
-
-You have two options:
-
-#### Option A: Using Git (Recommended)
-
-1. Open **Command Prompt** (Windows) or **Terminal** (Mac/Linux)
-2. Navigate to the folder where you want to save the project. For example:
-   ```bash
-   cd Desktop
-   ```
-3. Copy the project URL from GitHub (it looks like: `https://github.com/username/sembark.git`)
-4. Run this command (replace with your actual URL):
-   ```bash
-   git clone https://github.com/username/sembark.git
-   ```
-5. Wait for the download to complete
-
-#### Option B: Download as ZIP
-
-1. Go to the project's GitHub page
-2. Click the green **"Code"** button
-3. Click **"Download ZIP"**
-4. Extract the ZIP file to a folder on your computer (like Desktop)
-
-### Step 2: Open the Project Folder
-
-1. Navigate to the project folder:
-   - If you used Git: The folder is already in the location where you ran the `git clone` command
-   - If you downloaded ZIP: Go to where you extracted the ZIP file
-2. The folder should be named `Sembark` or `sembark`
-
-### Step 3: Open Terminal/Command Prompt in Project Folder
-
-**For Windows:**
-
-1. Open the project folder in File Explorer
-2. Click in the address bar at the top
-3. Type `cmd` and press Enter
-   - OR right-click in the folder and select "Open in Terminal" or "Open PowerShell here"
-
-**For Mac/Linux:**
-
-1. Open the project folder in Finder (Mac) or File Manager (Linux)
-2. Right-click in the folder
-3. Select "Open Terminal Here" or "Open in Terminal"
-
-**Alternative Method:**
-
-1. Open Command Prompt/Terminal
-2. Use `cd` command to navigate to the project folder:
-   ```bash
-   cd path/to/Sembark
-   ```
-   Example:
-   ```bash
-   cd C:\Users\YourName\Desktop\Sembark
-   ```
-   (Replace with your actual folder path)
-
-### Step 4: Install Project Dependencies
-
-**What are dependencies?**  
-Dependencies are external libraries and tools that the project needs to run. Think of them as ingredients needed to cook a recipe.
-
-1. Make sure you're in the project folder in your terminal
-2. Run this command:
-   ```bash
-   npm install
-   ```
-3. Wait for the installation to complete (this may take 2-5 minutes)
-   - You'll see a lot of text scrolling
-   - Look for messages like "added X packages" or "found 0 vulnerabilities"
-   - Don't worry about warnings (yellow text) - they're usually fine
-4. When you see your command prompt again (with the folder path), installation is complete! ✅
-
-**What if you get an error?**
-
-- Make sure you have Node.js installed (check Step 1)
-- Make sure you're in the correct folder (the one with `package.json` file)
-- Try running `npm install` again
-
-## Running the Project
-
-Now that everything is installed, let's start the project:
-
-### Step 1: Start the Development Server
-
-1. Make sure you're in the project folder in your terminal
-2. Run this command:
-   ```bash
-   npm run dev
-   ```
-3. Wait a few seconds - you'll see output like:
-
-   ```
-   VITE v7.x.x  ready in xxx ms
-
-   ➜  Local:   http://localhost:5173/
-   ➜  Network: use --host to expose
-   ```
-
-4. **Keep this terminal window open** - don't close it!
-
-### Step 2: Open the Project in Your Browser
-
-1. Open your web browser (Chrome, Firefox, Edge, Safari - any browser works)
-2. Go to this address:
-   ```
-   http://localhost:5173
-   ```
-   - Type it in the address bar and press Enter
-   - OR click the link if it appears in your terminal
-3. You should now see the Sembark website! 🎉
-
-### Step 3: Viewing the Project
-
-- The website will automatically update when you make changes to the code
-- You can navigate through different pages:
-  - **Home Page:** Shows all products
-  - **Product Detail Page:** Click on any product to see details
-  - **Cart Page:** View items in your shopping cart
-
-### Step 4: Stopping the Server
-
-When you're done viewing the project:
-
-1. Go back to your terminal window
-2. Press `Ctrl + C` (Windows/Linux) or `Cmd + C` (Mac)
-3. The server will stop
-4. You can close the terminal window
-
-## Project Structure
-
-Here's what the main folders and files do:
-
-```
-Sembark/
-├── src/                    # Main source code
-│   ├── components/         # Reusable UI components
-│   │   ├── Navbar.tsx     # Navigation bar
-│   │   ├── Footer.tsx     # Footer component
-│   │   └── Products.tsx   # Product listing component
-│   ├── pages/             # Page components
-│   │   ├── Home.tsx       # Home page
-│   │   ├── ProductDetail.tsx  # Product detail page
-│   │   └── CartPage.tsx   # Shopping cart page
-│   ├── context/            # State management
-│   │   └── AppContext.tsx # Global app state
-│   ├── routes/            # Routing configuration
-│   │   └── AppRouter.tsx # Page routes
-│   ├── App.tsx            # Main app component
-│   └── main.tsx           # Application entry point
-├── public/                # Static files (images, etc.)
-├── package.json           # Project configuration and dependencies
-├── vite.config.ts        # Vite build tool configuration
-└── README.md             # This file!
+```bash
+npm install
 ```
 
-## Available Scripts
+### Running the App (Development):
 
-You can run these commands in the project folder:
+```bash
+npm run dev
+```
 
-### `npm run dev`
+Runs the app at:
+👉 **http://localhost:5173/**
 
-- Starts the development server
-- Opens the project at `http://localhost:5173`
-- Use this to view and test the project
+## 🏗️ Build for Production
 
-### `npm run build`
+```bash
+npm run build
+```
 
-- Creates an optimized production build
-- Generates files in the `dist` folder
-- Use this when you want to deploy the project
+## 🧪 Run Cypress Tests
 
-### `npm run preview`
+### Open Cypress UI:
 
-- Previews the production build locally
-- Run this after `npm run build`
+```bash
+npx cypress open
+```
 
-### `npm run lint`
+### Available test files:
 
-- Checks code for errors and style issues
-- Helps maintain code quality
+- `baisc-page-testing.cy.js` - Basic page functionality tests
 
-## Troubleshooting
+## 🌐 Deployment (Vercel)
 
-### Problem: "node: command not found" or "npm: command not found"
+1. Push project to GitHub
+2. Go to https://vercel.com
+3. Import your repository
+4. Framework: Vite (Auto-detected)
+5. Build command: `npm run build`
+6. Output directory: `dist`
+7. Deploy 🚀
 
-**Solution:** Node.js is not installed or not in your PATH. Reinstall Node.js from [nodejs.org](https://nodejs.org/)
+## 📝 Available Scripts
 
-### Problem: "npm install" fails or takes too long
+- `npm run dev` - Start development server
+- `npm run build` - Build for production
+- `npm run preview` - Preview production build
+- `npm run lint` - Run ESLint
 
-**Solutions:**
+## 🎯 Key Features Implementation
 
-- Check your internet connection
-- Try clearing npm cache: `npm cache clean --force`
-- Delete `node_modules` folder and `package-lock.json`, then run `npm install` again
-- Try using a different network (some corporate networks block npm)
+- **State Management**: React Context API for global state
+- **Data Persistence**: localStorage for cart, sessionStorage for filters
+- **URL State Sync**: Filters and sorting reflected in URL parameters
+- **Responsive Design**: Mobile-first approach with Tailwind CSS
+- **Animations**: Framer Motion for smooth transitions
+- **Accessibility**: Semantic HTML, ARIA labels, keyboard navigation
 
-### Problem: Port 5173 is already in use
+## 👤 Author
 
-**Solution:**
+**Manjeet Yadav**
 
-- Another program is using port 5173
-- Close other applications using that port
-- Or change the port in `vite.config.ts`
-
-### Problem: Website shows "Cannot GET /" or blank page
-
-**Solutions:**
-
-- Make sure the dev server is running (`npm run dev`)
-- Check that you're going to `http://localhost:5173` (not `localhost:3000`)
-- Try refreshing the page (F5 or Ctrl+R)
-- Clear browser cache
-
-### Problem: Changes not showing in browser
-
-**Solutions:**
-
-- Hard refresh: `Ctrl + Shift + R` (Windows/Linux) or `Cmd + Shift + R` (Mac)
-- Make sure the dev server is running
-- Check the terminal for any error messages
-
-### Problem: "Module not found" errors
-
-**Solution:**
-
-- Run `npm install` again
-- Delete `node_modules` folder and `package-lock.json`
-- Run `npm install` again
-
-### Still Having Issues?
-
-1. **Check Node.js version:** Run `node --version` - should be v18 or higher
-2. **Check npm version:** Run `npm --version` - should be v9 or higher
-3. **Read error messages carefully** - they often tell you what's wrong
-4. **Search for the error message** on Google or Stack Overflow
-5. **Make sure you're in the correct folder** - the one with `package.json`
-
-## Technologies Used
-
-This project is built with modern web technologies:
-
-- **React 19** - JavaScript library for building user interfaces
-- **TypeScript** - Typed superset of JavaScript
-- **Vite** - Fast build tool and development server
-- **React Router** - For navigation between pages
-- **Tailwind CSS** - Utility-first CSS framework
-- **Axios** - For making HTTP requests
-- **React Hot Toast** - For showing notifications
-
-## Additional Notes
-
-- The project uses **Vite** as the build tool, which provides fast development experience
-- All code is written in **TypeScript** for better code quality
-- The project follows modern React best practices
-- State management is handled using React Context API
-
-## Need Help?
-
-If you're stuck:
-
-1. Read the error message carefully
-2. Check this README's troubleshooting section
-3. Search online for the specific error
-4. Make sure all prerequisites are installed correctly
+E-commerce React Application with full functionality & Cypress E2E testing.
 
 ---
 
 **Happy Coding! 🚀**
-
-If you found this project helpful, consider giving it a star on GitHub!
-
