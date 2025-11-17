@@ -138,7 +138,7 @@ const ProductDetail = () => {
               <div className="w-2 h-2 bg-green-500 rounded-full mt-2"></div>
               <div>
                 <p className="text-green-800 font-semibold text-sm mb-1">In Stock</p>
-                <p className="text-green-700 text-xs">Free delivery on orders above ₹500</p>
+                <p className="text-green-700 text-xs">Free delivery</p>
               </div>
             </div>
           </motion.div>
