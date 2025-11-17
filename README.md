@@ -7,6 +7,7 @@ A modern, responsive e-commerce web application built with React, TypeScript, an
 ## 📦 Features
 
 ### 🏠 Home Page
+
 - Responsive product grid with smooth animations
 - Category filters with URL-based state management
 - Sorting functionality (Price: Low/High, Name: A-Z/Z-A)
@@ -15,6 +16,7 @@ A modern, responsive e-commerce web application built with React, TypeScript, an
 - Loading states and empty states
 
 ### 🛒 Cart
+
 - Add to cart functionality
 - Increase/decrease quantity
 - Remove products from cart
@@ -24,24 +26,25 @@ A modern, responsive e-commerce web application built with React, TypeScript, an
 - Responsive cart layout
 
 ### 📄 Product Details Page
+
 - Dynamic routing (`/product/:id`)
 - Comprehensive product information display
 - Add to cart and Buy Now buttons
 - Product image with hover effects
-- Rating display
 - Price details with discount indicators
 - Back navigation
 - Accessible image with alt text
 
 ### 🎨 UI/UX Features
+
 - Smooth animations using Framer Motion
 - Responsive design (mobile, tablet, desktop)
 - Modern and clean interface
 - Toast notifications for user actions
-- Loading spinners
 - Hover effects and transitions
 
 ### 🧪 Testing (Cypress)
+
 - Home page tests
 - Product details page tests
 - Cart page tests
@@ -93,12 +96,27 @@ cypress/
   support/
 ```
 
+## 📋 Prerequisites
+
+Before you begin, ensure you have the following installed on your system:
+
+- **Node.js** (v18 or higher) - [Download here](https://nodejs.org/)
+- **npm** (v9 or higher) - Comes with Node.js
+- **Git** (optional) - For cloning the repository
+
+To verify your installation, run:
+
+```bash
+node --version
+npm --version
+```
+
 ## 🛠️ Installation & Setup
 
 ### Clone the repository:
 
 ```bash
-git clone https://github.com/Manjeet-Yadav-777/Sembark.git
+git clone <your-repository-url>
 cd Sembark
 ```
 
@@ -170,4 +188,3 @@ E-commerce React Application with full functionality & Cypress E2E testing.
 ---
 
 **Happy Coding! 🚀**
-
