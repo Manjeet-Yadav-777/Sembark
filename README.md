@@ -98,7 +98,7 @@ cypress/
 ### Clone the repository:
 
 ```bash
-git clone <your-repository-url>
+git clone https://github.com/Manjeet-Yadav-777/Sembark.git
 cd Sembark
 ```
 
@@ -170,3 +170,4 @@ E-commerce React Application with full functionality & Cypress E2E testing.
 ---
 
 **Happy Coding! 🚀**
+
