@@ -125,7 +125,7 @@ const CartPage = () => {
                           whileTap={{ scale: 0.9 }}
                           onClick={() => {
                             decreaseQty(item.id);
-                            toast.success("Quantity Decreased");
+                            toast.error("Quantity Decreased");
                           }}
                           className="w-8 h-8 cursor-pointer flex items-center justify-center bg-gray-300 rounded-lg text-lg font-bold hover:bg-gray-400 transition-colors"
                         >
@@ -151,7 +151,7 @@ const CartPage = () => {
                         whileTap={{ scale: 0.95 }}
                         onClick={() => {
                           removeItem(item.id);
-                          toast.success("Item Removed");
+                          toast.error("Item Removed");
                         }}
                         className="text-sm px-3 py-2 bg-red-500 text-white rounded-md cursor-pointer hover:bg-red-600 transition-colors"
                       >
