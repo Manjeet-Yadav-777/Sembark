@@ -113,7 +113,7 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
       setProducts(sorted);
       
     } catch (error) {
-      console.error("Error:", error);
+      // Error handling
     } finally {
       setLoading(false);
     }
@@ -133,7 +133,7 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
         description: data.description,
       });
     } catch (error) {
-      console.error("Error:", error);
+      // Error handling
     } finally {
       setLoading(false);
     }
@@ -183,7 +183,6 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
       params.set("categories", categories.join(","));
     }
     window.history.replaceState({}, "", `${window.location.pathname}${params.toString() ? `?${params.toString()}` : ""}`);
-    console.log("Selected categories:", categories);
     let filtered = allProducts;
     if (!categories.includes("All") && categories.length > 0) {
       filtered = allProducts.filter((p) => categories.includes(p.category));
@@ -197,11 +196,8 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
     setSortOption(option);
     sessionStorage.setItem("sortOption", option);
     const params = new URLSearchParams(window.location.search);
-    console.log(params);
-    
     params.set("sort", option);
     window.history.replaceState({}, "", `${window.location.pathname}?${params.toString()}`);
-    console.log("Sort option:", option);
     let filtered = allProducts;
     if (!selectedCategories.includes("All") && selectedCategories.length > 0) {
       filtered = allProducts.filter((p) => selectedCategories.includes(p.category));
@@ -234,7 +230,6 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
     const sorted = sortProductsList([...allProducts], "price-low");
     setFilteredProducts(sorted);
     setProducts(sorted);
-    console.log("Filters reset to default");
   };
 
   useEffect(() => {
