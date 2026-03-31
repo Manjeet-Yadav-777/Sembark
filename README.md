@@ -4,6 +4,10 @@
 
 A ==modern==, responsive e-commerce web application built with React, TypeScript, and Vite. Features product listings, detailed product pages, shopping cart functionality, and smooth animations.
 
+| Name     | Age | City     |
+|----------|-----|----------|
+| Manjeet  | 25  | Jaipur   |
+| Rahul    | 28  | Delhi    |
 ## 📦 Features
 
 ### 🏠 Home Page
