@@ -2,7 +2,7 @@
 
 🚀 **Live Demo:** https://sembark-alpha.vercel.app/
 
-A modern, responsive e-commerce web application built with React, TypeScript, and Vite. Features product listings, detailed product pages, shopping cart functionality, and smooth animations.
+A ==modern==, responsive e-commerce web application built with React, TypeScript, and Vite. Features product listings, detailed product pages, shopping cart functionality, and smooth animations.
 
 ## 📦 Features
 
